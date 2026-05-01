@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parlay-api"
+version = "0.1.0"
+description = "Python SDK for parlay-api.com — drop-in replacement for the-odds-api with player props, prediction markets, and WebSocket streaming."
+readme = "README.md"
+authors = [
+    { name = "Jacob", email = "peakpotentialmediaventures@gmail.com" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+keywords = ["sports", "betting", "odds", "api", "the-odds-api", "sportsbook", "polymarket", "parlay", "devig", "+ev"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+
+[project.optional-dependencies]
+ws = ["websockets>=11.0"]
+dev = ["pytest>=7.0", "pytest-asyncio>=0.21", "ruff>=0.1"]
+
+[project.urls]
+Homepage = "https://parlay-api.com"
+Documentation = "https://parlay-api.com/docs"
+Repository = "https://github.com/JacobiusMakes/parlay-api-python"
+"Bug Tracker" = "https://github.com/JacobiusMakes/parlay-api-python/issues"
+Changelog = "https://github.com/JacobiusMakes/parlay-api-python/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+packages = ["parlay_api"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
