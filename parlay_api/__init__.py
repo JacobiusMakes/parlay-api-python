@@ -55,7 +55,7 @@ response shapes work without further changes.
 """
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 import json
 import urllib.error
@@ -359,6 +359,221 @@ class ParlayAPI:
         N, "credits_total": N }``.
         """
         return self._request("/v1/usage")
+
+    def bookmakers(self, all: bool = False) -> list[dict]:
+        """Bookmaker registry with status.
+
+        Returns the 26 active books by default. Pass ``all=True`` to also
+        include merged (e.g. ZEbet -> Unibet), decommissioned (e.g. FDJ
+        ParionsSport), and not-yet-integrated entries with explanatory
+        ``note`` fields.
+        """
+        return self._request("/v1/bookmakers",
+                             {"all": all} if all else None)
+
+    def participants(self, sport_key: str) -> list[dict]:
+        """Teams (or players for individual sports) that have appeared
+        in events for this sport. Useful for autocomplete and dropdowns."""
+        return self._request(f"/v1/sports/{sport_key}/participants")
+
+    def live(
+        self,
+        sport_key: str,
+        regions: str = "us",
+        markets: str | Iterable[str] = "h2h",
+        bookmakers: str | Iterable[str] | None = None,
+        odds_format: str = "american",
+    ) -> list[dict]:
+        """In-play odds only.
+
+        Returns events whose ``commence_time`` is at or before now,
+        from the same odds_snapshots that powers ``odds()``. The
+        distinction is the time filter, not the data source. Costs
+        3 credits per call.
+        """
+        params: dict[str, Any] = {
+            "regions": regions,
+            "markets": markets,
+            "oddsFormat": odds_format,
+        }
+        if bookmakers is not None:
+            params["bookmakers"] = bookmakers
+        return self._request(f"/v1/sports/{sport_key}/live", params)
+
+    def compare(
+        self,
+        sport_key: str,
+        markets: str = "h2h",
+        odds_format: str = "american",
+    ) -> list[dict]:
+        """Side-by-side line comparison across all books per event.
+
+        Returns each event with each bookmaker's odds plus the best
+        line per outcome. 5 credits per call.
+        """
+        return self._request(f"/v1/sports/{sport_key}/compare", {
+            "markets": markets,
+            "oddsFormat": odds_format,
+        })
+
+    def arbitrage(
+        self,
+        sport_key: str,
+        min_profit: float = 0.005,
+    ) -> list[dict]:
+        """Pre-computed cross-book arbitrage opportunities.
+
+        Each row includes recommended stake split and time-to-close.
+        Refreshed every 30 seconds upstream.
+        """
+        return self._request(f"/v1/sports/{sport_key}/arbitrage",
+                             {"min_profit": min_profit})
+
+    def ev(
+        self,
+        sport_key: str,
+        min_edge: float = 0.02,
+    ) -> list[dict]:
+        """Pre-computed +EV opportunities vs no-vig consensus.
+
+        Each row includes ``ev_percent``, the source price, the
+        consensus fair price, and the sample-book count behind the
+        consensus.
+        """
+        return self._request(f"/v1/sports/{sport_key}/ev",
+                             {"min_edge": min_edge})
+
+    def consensus(
+        self,
+        sport_key: str,
+        markets: str = "h2h",
+        odds_format: str = "american",
+    ) -> list[dict]:
+        """No-vig consensus fair odds across all bookmakers.
+
+        Useful as a sharp baseline. Each row is the de-vigged median
+        across the rotation per outcome.
+        """
+        return self._request(f"/v1/sports/{sport_key}/consensus", {
+            "markets": markets,
+            "oddsFormat": odds_format,
+        })
+
+    def closing_lines(self, sport_key: str) -> list[dict]:
+        """Most recent closing prices for completed events.
+
+        Useful for CLV computation: snapshot your bet price at
+        placement time, then call this at game start to grab the close.
+        """
+        return self._request(f"/v1/sports/{sport_key}/closing-lines")
+
+    def historical_closing_odds(
+        self,
+        sport_key: str,
+        markets: str | Iterable[str] = "h2h",
+        bookmakers: str | Iterable[str] | None = None,
+        season: str | None = None,
+        date: str | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        player: str | None = None,
+        odds_format: str = "american",
+    ) -> list[dict]:
+        """Historical closing lines.
+
+        ``markets`` accepts game-line markets (``h2h``, ``spreads``,
+        ``totals``) and player prop markets (``player_strikeouts``,
+        ``player_total_bases``, ``player_points``, etc.) freely mixed.
+        Game lines route to historical_odds (back to 1999 for NFL);
+        props route to prop_closing_lines (from 2026-04-24).
+
+        ``date`` is a shortcut for ``date_from = date_to = date``.
+        ``player`` is a substring match on player_name (props only).
+        Costs 10 credits per call.
+        """
+        params: dict[str, Any] = {
+            "markets": markets,
+            "oddsFormat": odds_format,
+        }
+        if bookmakers is not None:
+            params["bookmakers"] = bookmakers
+        if season:
+            params["season"] = season
+        if date:
+            params["date"] = date
+        if date_from:
+            params["dateFrom"] = date_from
+        if date_to:
+            params["dateTo"] = date_to
+        if player:
+            params["player"] = player
+        return self._request(
+            f"/v1/historical/sports/{sport_key}/closing-odds", params,
+        )
+
+    def line_movement(
+        self,
+        sport_key: str,
+        event_id: str,
+        market_key: str,
+        bookmaker: str | None = None,
+        window_minutes: int = 1440,
+    ) -> dict:
+        """Time-series price history for one market on one event.
+
+        Pair with the WebSocket stream for sub-second alerts; this
+        REST path is for backfill / chart data. 2 credits per call.
+        """
+        params: dict[str, Any] = {
+            "event_id": event_id,
+            "market_key": market_key,
+            "window_minutes": window_minutes,
+        }
+        if bookmaker:
+            params["bookmaker"] = bookmaker
+        return self._request(f"/v1/sports/{sport_key}/line-movement", params)
+
+    def prop_coverage(self, sport_key: str) -> dict:
+        """Which bookmakers cover which prop market types for a sport.
+
+        Returns ``{markets: [{market_key, bookmakers: [{key, title,
+        sample_count}]}]}``. Free.
+        """
+        return self._request(f"/v1/sports/{sport_key}/props/coverage")
+
+    def historical_coverage(self) -> dict:
+        """Stats on the historical archive: total rows, source count,
+        per-sport coverage map. Free."""
+        return self._request("/v1/historical/coverage")
+
+    def prediction_markets(self, sport_key: str) -> list[dict]:
+        """Kalshi + Polymarket prices normalized to American/decimal.
+
+        Same schema as sportsbook responses. Cross-reference with
+        ``odds()`` to find pricing dislocations between traditional
+        books and prediction markets.
+        """
+        return self._request(f"/v1/prediction-markets/{sport_key}")
+
+    def exchange_markets(self, sport_key: str) -> dict:
+        """Novig + ProphetX exchange prices, includes lay sides."""
+        return self._request(f"/v1/exchange/{sport_key}/markets")
+
+    def inplay_arbs(self) -> list[dict]:
+        """Cross-source in-play arbitrage opportunities.
+
+        Wraps ``arbitrage()`` per active sport into a single firehose
+        for live-betting scanners.
+        """
+        return self._request("/v1/inplay/arbs")
+
+    def stats(self) -> dict:
+        """Live API throughput stats. Public, no auth required, no credits."""
+        return self._request("/v1/stats")
+
+    def health(self) -> dict:
+        """Liveness probe. Public, no auth required, no credits."""
+        return self._request("/health")
 
     # ------------------------------------------------------------------
     # WebSocket

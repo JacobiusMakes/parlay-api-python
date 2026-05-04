@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "parlay-api"
-version = "0.1.0"
-description = "Python SDK for parlay-api.com — drop-in replacement for the-odds-api with player props, prediction markets, and WebSocket streaming."
+version = "0.2.0"
+description = "Python SDK for parlay-api.com. Drop-in replacement for the-odds-api with player props, prediction markets, exchanges, historical archive, and WebSocket streaming."
 readme = "README.md"
 authors = [
     { name = "Jacob", email = "peakpotentialmediaventures@gmail.com" }
