@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.3.2 (2026-08-25)
+
+### Changed
+
+- README: corrected source count to "45+ sportsbooks & sources"
+  (the "22 sources" figure was stale).
+- README: pricing table replaced with a link to
+  [parlay-api.com/pricing](https://parlay-api.com/pricing) so listed
+  prices can't drift out of date. Free tier (1,000 credits/month, no
+  card) and Business+ WebSocket availability stated inline.
+- Package classifier: Development Status 4 - Beta upgraded to
+  5 - Production/Stable.
+- Repo synced with the code published to PyPI as 0.3.0/0.3.1 (those
+  releases were published without a matching repo push; see below).
+
+## 0.3.0 / 0.3.1 (published to PyPI without a repo push)
+
+### Added
+
+- Keyless client: `ParlayAPI()` now works without an API key for
+  keyless endpoints (sports, status, live board), with fallback to
+  the `PARLAYAPI_KEY` environment variable. Keyed calls raise
+  `InvalidAPIKeyError` at call time.
+- POST support in the request layer (`method`, `json_body`).
+- Value-hunting methods: `middles()`, `verdict()`,
+  `parlay_verdict()`, `best_bets()`, `set_bettable_books()`,
+  `bettable_books()`.
+
 ## 0.2.0 (2026-05-04)
 
 Major method coverage expansion. v0.1.0 shipped with 9 endpoint methods;

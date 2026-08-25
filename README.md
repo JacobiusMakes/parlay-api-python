@@ -1,8 +1,9 @@
 # parlay-api
 
 Python SDK for [parlay-api.com](https://parlay-api.com), a drop-in
-replacement for [the-odds-api.com](https://the-odds-api.com) with 22
-sources, player props, prediction markets, and WebSocket streaming.
+replacement for [the-odds-api.com](https://the-odds-api.com) with 45+
+sportsbooks & sources, player props, prediction markets, and WebSocket
+streaming.
 
 ```bash
 pip install parlay-api
@@ -20,8 +21,8 @@ events = client.odds("baseball_mlb", regions="us", markets="h2h,spreads,totals")
 The-odds-api is fine but ships flat -115/-115 placeholders for half
 the props you actually want, costs 5 to 6 times more at the Enterprise
 tier, and has no streaming. ParlayAPI ships real American odds across
-22 sources, integrates Polymarket as a sharp prediction-market
-baseline, and runs WebSockets on Business+ tiers.
+45+ sportsbooks & sources, integrates Polymarket as a sharp
+prediction-market baseline, and runs WebSockets on Business+ tiers.
 
 The SDK preserves TOA's endpoint shape, so migration is one config
 change.
@@ -226,14 +227,10 @@ print(client.last_quota.requests_remaining)  # int
 
 ## Pricing
 
-| Tier | $/month | Credits/month | Rate limit | WebSocket |
-|---|---|---|---|---|
-| Free | $0 | 1,000 | 10 req/s | no |
-| Starter | $5 | 20,000 | 30 req/s | no |
-| Pro | $20 | 100,000 | 60 req/s | no |
-| Business | $40 | 1,000,000 | 100 req/s | yes |
-| Enterprise | $100 | 5,000,000 | 200 req/s | yes |
-| Scale | $200 | 50,000,000 | 500 req/s | yes |
+The free tier includes 1,000 credits/month with no card required.
+WebSocket streaming is available on Business tier and up. Current
+paid-tier pricing, credits, and rate limits live at
+[parlay-api.com/pricing](https://parlay-api.com/pricing).
 
 Sign up at [parlay-api.com](https://parlay-api.com).
 
