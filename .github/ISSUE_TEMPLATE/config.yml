@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/JacobiusMakes/parlay-api-python/discussions
+    about: Ask anything or share what you are building.
+  - name: Email support
+    url: https://parlay-api.com/docs
+    about: support@parlay-api.com, usually same-day replies.
