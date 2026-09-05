@@ -32,6 +32,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
+USER_AGENT = "ParlayAPI-odds-workspace/1.0"
 SPORTS = {
     "baseball_mlb",
     "basketball_nba",
@@ -360,7 +361,7 @@ def validate_response(payload, args):
 
 def main(argv=None):
     args = parse_args(argv)
-    headers = {"Accept": "application/json"}
+    headers = {"Accept": "application/json", "User-Agent": USER_AGENT}
     if args.full:
         api_key = os.environ.get("PARLAY_API_KEY", "").strip()
         if not api_key or "\n" in api_key or "\r" in api_key:
@@ -392,11 +393,16 @@ def main(argv=None):
     except HTTPError as error:
         retry = error.headers.get("Retry-After") if error.headers else None
         suffix = " Retry-After: " + str(retry)[:80] if error.code == 429 and retry else ""
+        if args.full:
+            hint = ". Check your key, allowance and request settings."
+        elif error.code == 403:
+            hint = ". The anonymous demo request was denied; this endpoint does not require an API key."
+        else:
+            hint = (
+                ". The no-key demo request failed. Check service availability and request settings."
+            )
         print(
-            "Request failed: HTTP "
-            + str(error.code)
-            + ". Check your key, allowance and request settings."
-            + suffix,
+            "Request failed: HTTP " + str(error.code) + hint + suffix,
             file=sys.stderr,
         )
         error.close()

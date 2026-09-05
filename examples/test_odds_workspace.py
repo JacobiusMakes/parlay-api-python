@@ -90,6 +90,7 @@ class WorkspaceTests(unittest.TestCase):
         request = opener.open.call_args.args[0]
         self.assertEqual(request.full_url, "https://parlay-api.com/v1/try/baseball_mlb/odds")
         self.assertIsNone(request.get_header("X-api-key"))
+        self.assertEqual(request.get_header("User-agent"), "ParlayAPI-odds-workspace/1.0")
         self.assertEqual(opener.open.call_args.kwargs["timeout"], 30)
         self.assertEqual(len(list(csv.DictReader(io.StringIO(stdout)))), 2)
         self.assertIn("first five US moneyline", stderr)
@@ -130,6 +131,7 @@ class WorkspaceTests(unittest.TestCase):
             },
         )
         self.assertEqual(request.get_header("X-api-key"), "offline-placeholder")
+        self.assertEqual(request.get_header("User-agent"), "ParlayAPI-odds-workspace/1.0")
         self.assertNotIn("offline-placeholder", stdout + stderr + request.full_url)
         args = starter.parse_args(["--full", "--no-include-live"])
         self.assertEqual(
@@ -240,7 +242,28 @@ class WorkspaceTests(unittest.TestCase):
             self.assertEqual(stdout, "")
             self.assertIn("HTTP " + str(status), stderr)
             self.assertNotIn("untrusted text", stderr)
+            self.assertNotIn("Check your key", stderr)
             self.assertEqual("Retry-After: 30" in stderr, status == 429)
+            opener.open.assert_called_once()
+            self.assertTrue(error.closed)
+
+    def test_demo_and_full_403_diagnostics_distinguish_authentication(self):
+        for args in ([], ["--full"]):
+            error = HTTPError(
+                "https://parlay-api.com/test", 403, "forbidden", {}, io.BytesIO(b"server body")
+            )
+            code, stdout, stderr, opener = self.run_cli(
+                args, error=error, environ={"PARLAY_API_KEY": "offline-placeholder"}
+            )
+            self.assertEqual(code, 1)
+            self.assertEqual(stdout, "")
+            if args:
+                self.assertIn("Check your key, allowance", stderr)
+            else:
+                self.assertIn("anonymous demo request was denied", stderr)
+                self.assertIn("does not require an API key", stderr)
+                self.assertNotIn("Check your key", stderr)
+            self.assertNotIn("offline-placeholder", stderr)
             opener.open.assert_called_once()
             self.assertTrue(error.closed)
 
