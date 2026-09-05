@@ -1,0 +1,24 @@
+{
+  "captured_at_utc": "2026-09-05T03:58:04.698784+00:00",
+  "url": "https://parlay-api.com/v1/try/baseball_mlb/odds",
+  "status": 200,
+  "content_type": "application/json",
+  "authenticated": false,
+  "original_sha256": "0b603acf93d69fff346893b9221d6acbd0f6430996c85716b9bb28b47f88d0f9",
+  "original_bytes": 19955,
+  "subset_sha256": "bc7be6cceb82dc13796053e678599c4e6ab9514ffd20b6583fbd37fdaba0607a",
+  "subset_bytes": 2010,
+  "selection": {
+    "top_level_fields": [
+      "demo",
+      "sport_key",
+      "events"
+    ],
+    "event_id": "430601fbc362d4777f5dbe60bd2fe9c7",
+    "bookmaker_keys": [
+      "fanduel",
+      "novig"
+    ]
+  },
+  "note": "Unmodified source values from a dated public demo, reduced to one event and two bookmakers for offline regression. Repeated fanduel/h2h groups must be excluded; novig/h2h has distinct source bookmaker and market timestamps. This is not current coverage evidence."
+}
