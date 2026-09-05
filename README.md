@@ -152,15 +152,15 @@ await ws.send(json.dumps({
 
 The [`examples/`](./examples/) folder ships three runnable scripts:
 
-- **`ev_scanner.py`** — pulls a sport's player props, devigs the
+- **`ev_scanner.py`**: pulls a sport's player props, devigs the
   sharpest book in each market as the fair-price baseline, and prints
   every other book's posted line that exceeds a +3pp edge threshold.
   This is the basic shape of a +EV scanner.
-- **`arb_finder.py`** — scans h2h game lines across every book in
+- **`arb_finder.py`**: scans h2h game lines across every book in
   the response for any pair where combined implied probability is
   under 100%. Computes the optimal stake split for a given bankroll.
   Risk-free profit when an arb exists.
-- **`websocket_stream.py`** — subscribes to the live odds WebSocket
+- **`websocket_stream.py`**: subscribes to the live odds WebSocket
   for a sport and prints diff frames as they arrive.
 
 Run any of them after setting `PARLAY_API_KEY`:
