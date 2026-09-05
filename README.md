@@ -242,3 +242,7 @@ MIT. See [`LICENSE`](./LICENSE).
 
 [github.com/JacobiusMakes/parlay-api-python/issues](https://github.com/JacobiusMakes/parlay-api-python/issues)
 or email [peakpotentialmediaventures@gmail.com](mailto:peakpotentialmediaventures@gmail.com).
+
+---
+
+Part of the [ParlayAPI](https://parlay-api.com) ecosystem: a real-time sports odds API with a free tier of 1,000 credits per month, no card required. Explore all the tools at [github.com/JacobiusMakes](https://github.com/JacobiusMakes).
