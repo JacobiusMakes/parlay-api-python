@@ -1,0 +1,3 @@
+include CHANGELOG.md
+# The installed-package harness uses the repository's captured fixtures.
+prune tests

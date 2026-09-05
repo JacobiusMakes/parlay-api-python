@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "parlay-api"
-version = "0.3.2"
-description = "Python SDK for parlay-api.com — drop-in replacement for the-odds-api with player props, prediction markets, and WebSocket streaming."
+version = "0.3.3"
+description = "Python SDK for parlay-api.com with a no-key odds demo, CSV starter, and authenticated API client."
 readme = "README.md"
 authors = [
     { name = "Jacob", email = "peakpotentialmediaventures@gmail.com" }
@@ -40,6 +40,9 @@ Changelog = "https://github.com/JacobiusMakes/parlay-api-python/blob/main/CHANGE
 
 [tool.setuptools]
 packages = ["parlay_api"]
+py-modules = ["odds_workspace"]
+# Package the existing standalone starter without maintaining a second copy.
+package-dir = { "" = "examples", "parlay_api" = "parlay_api" }
 
 [tool.ruff]
 line-length = 100

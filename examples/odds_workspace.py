@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Export one ParlayAPI odds response to CSV. Python 3.9+, standard library only.
 
+After installing parlay-api, the same starter runs as:
+    python -m parlay_api
+    python -m parlay_api --full --markets h2h,spreads,totals > odds.csv
+
 No key or package installation is needed for the default demo request:
     python3 odds_workspace.py > odds.csv
     python3 odds_workspace.py --sport americanfootball_nfl > odds.csv
@@ -283,9 +287,9 @@ def parse_markets(value):
     return [market for market in ("h2h", "spreads", "totals") if market in requested]
 
 
-def parse_args(argv=None):
+def parse_args(argv=None, prog=None):
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+        prog=prog, description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
         "--sport",
@@ -359,8 +363,8 @@ def validate_response(payload, args):
     return rows, issues
 
 
-def main(argv=None):
-    args = parse_args(argv)
+def main(argv=None, prog=None):
+    args = parse_args(argv, prog=prog)
     headers = {"Accept": "application/json", "User-Agent": USER_AGENT}
     if args.full:
         api_key = os.environ.get("PARLAY_API_KEY", "").strip()
