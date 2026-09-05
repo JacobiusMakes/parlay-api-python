@@ -150,7 +150,38 @@ await ws.send(json.dumps({
 
 ## Examples
 
-The [`examples/`](./examples/) folder ships three runnable scripts:
+### Export a source snapshot to CSV, no install needed
+
+Download [odds_workspace.py](https://raw.githubusercontent.com/JacobiusMakes/parlay-api-python/main/examples/odds_workspace.py)
+([view source](./examples/odds_workspace.py)) and run it with Python 3.9+.
+It makes one no-key request and writes CSV to standard output:
+
+```bash
+python3 odds_workspace.py --sport baseball_mlb > odds.csv
+```
+
+The demo returns up to five US moneyline events, with a shared limit of 60
+requests/hour per IP. The script preserves source prices and timestamps,
+excludes ambiguous book/market groups, and reports omissions on standard error.
+An empty result does not establish coverage. It does not rank prices or poll.
+
+Set `PARLAY_API_KEY` in your terminal, then explicitly use `--full` for account
+requests. The key is ignored without that flag. Full mode includes commenced
+games by default; `--no-include-live` requests pregame events.
+
+```bash
+python3 odds_workspace.py --full --markets h2h,spreads,totals > odds.csv
+```
+
+Use the [Odds workspace](https://parlay-api.com/playground#project) to configure
+a request and estimate its refresh workload against [current plans](https://parlay-api.com/pricing).
+This standard-library HTTP example runs independently of the SDK. From a clone,
+run it as `python3 examples/odds_workspace.py`; its offline tests run with
+`python3 -m unittest discover -s examples -p 'test_odds_workspace.py'`.
+
+### SDK examples
+
+These three scripts in [`examples/`](./examples/) use the SDK:
 
 - **`ev_scanner.py`**: pulls a sport's player props, devigs the
   sharpest book in each market as the fair-price baseline, and prints
