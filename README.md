@@ -1,7 +1,7 @@
 # parlay-api
 
 Python SDK for [parlay-api.com](https://parlay-api.com), a drop-in
-replacement for [the-odds-api.com](https://the-odds-api.com) with 45+
+replacement for [the-odds-api.com](https://the-odds-api.com) with 30+
 sportsbooks & sources, player props, prediction markets, and WebSocket
 streaming.
 
@@ -21,7 +21,7 @@ events = client.odds("baseball_mlb", regions="us", markets="h2h,spreads,totals")
 The-odds-api is fine but ships flat -115/-115 placeholders for half
 the props you actually want, costs 5 to 6 times more at the Enterprise
 tier, and has no streaming. ParlayAPI ships real American odds across
-45+ sportsbooks & sources, integrates Polymarket as a sharp
+30+ sportsbooks & sources, integrates Polymarket as a sharp
 prediction-market baseline, and runs WebSockets on Business+ tiers.
 
 The SDK preserves TOA's endpoint shape, so migration is one config
