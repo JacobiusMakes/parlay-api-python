@@ -1,0 +1,33 @@
+meta {
+  name: ParlayAPI private research
+}
+
+headers {
+  Accept: application/json
+}
+
+script:pre-request {
+  req.setHeaders({ "Accept": "application/json" });
+  req.setMaxRedirects(0);
+  req.setTimeout(30000);
+  const fixedUrls = [
+    "https://parlay-api.com/v1/pricing",
+    "https://parlay-api.com/v1/sports",
+    "https://parlay-api.com/v1/try/baseball_mlb/odds",
+    "https://parlay-api.com/v1/account"
+  ];
+  const oddsTemplate = "https://parlay-api.com/v1/sports/{{sport_key}}/odds?regions=us&markets=h2h&oddsFormat=american&dateFormat=iso&include_live=true";
+  let requestUrl = req.getUrl();
+  if (requestUrl === oddsTemplate) {
+    const sport = bru.getEnvVar("sport_key");
+    if (typeof sport !== "string" || !/^[a-z][a-z0-9_]{0,63}$/.test(sport)) {
+      throw new Error("Select the Personal environment and set a valid sport_key from Sports catalog.");
+    }
+    requestUrl = requestUrl.replace("{{sport_key}}", sport);
+    req.setUrl(requestUrl);
+  }
+  const oddsUrl = /^https:\/\/parlay-api\.com\/v1\/sports\/[a-z][a-z0-9_]{0,63}\/odds\?regions=us&markets=h2h&oddsFormat=american&dateFormat=iso&include_live=true$/;
+  if (req.getMethod().toUpperCase() !== "GET" || (!fixedUrls.includes(requestUrl) && !oddsUrl.test(requestUrl))) {
+    throw new Error("This collection allows only its documented ParlayAPI GET requests.");
+  }
+}

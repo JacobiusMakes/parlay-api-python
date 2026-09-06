@@ -1,0 +1,37 @@
+meta {
+  name: 01 Sport moneyline with my key
+  type: http
+  seq: 4
+}
+
+get {
+  url: https://parlay-api.com/v1/sports/{{sport_key}}/odds?regions=us&markets=h2h&oddsFormat=american&dateFormat=iso&include_live=true
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  if (req.getExecutionMode() !== "standalone") {
+    bru.runner.skipRequest();
+    throw new Error("Private requests are disabled in collection runs. Open one request and use Send.");
+  }
+  if (bru.getProcessEnv("PARLAYAPI_ENABLE_PRIVATE_REQUESTS") !== "true") {
+    throw new Error("Private requests are off. Read the local .env instructions before enabling them.");
+  }
+  const key = bru.getProcessEnv("PARLAY_API_KEY");
+  if (typeof key !== "string" || !key.trim() || /[\r\n]/.test(key)) {
+    throw new Error("Set your own PARLAY_API_KEY in the ignored local .env file.");
+  }
+  req.setHeader("X-API-Key", key.trim());
+}
+
+tests {
+  test("Full odds is an event array, including an empty array", function () {
+    expect(res.getStatus()).to.equal(200);
+    expect(Array.isArray(res.getBody())).to.equal(true);
+  });
+}
+
+docs {
+  Private account request. Open this request and use Send only after configuring your local opt-in and own key. One US moneyline request, American prices, ISO dates and include_live=true. Your current account allowance applies; read Current plans before sending. Empty arrays are valid. Returned prices and timestamps remain source data, without ranking or inferred freshness.
+}

@@ -111,6 +111,7 @@ run `python3 odds_workspace.py`; the same flags apply. See
 
 The repository also contains:
 
+- [Bruno private-research collection](examples/bruno): keyless discovery and individually enabled requests using your own key, with a visible sport selector.
 - [ev_scanner.py](https://github.com/JacobiusMakes/parlay-api-python/blob/main/examples/ev_scanner.py): illustrates a chosen fair-price baseline and an edge calculation. Results depend on assumptions and available inputs.
 - [arb_finder.py](https://github.com/JacobiusMakes/parlay-api-python/blob/main/examples/arb_finder.py): illustrates implied-probability and stake calculations. Quotes and execution can change; a computed opportunity does not guarantee profit.
 - [websocket_stream.py](https://github.com/JacobiusMakes/parlay-api-python/blob/main/examples/websocket_stream.py): illustrates consuming a WebSocket stream with your own account.
