@@ -1,0 +1,26 @@
+meta {
+  name: 03 MLB moneyline demo
+  type: http
+  seq: 3
+}
+
+get {
+  url: https://parlay-api.com/v1/try/baseball_mlb/odds
+  body: none
+  auth: none
+}
+
+tests {
+  test("Demo wrapper and event bound", function () {
+    expect(res.getStatus()).to.equal(200);
+    const body = res.getBody();
+    expect(body !== null && typeof body === "object" && !Array.isArray(body)).to.equal(true);
+    expect(body.demo).to.equal(true);
+    expect(Array.isArray(body.events)).to.equal(true);
+    expect(body.events.length <= 5).to.equal(true);
+  });
+}
+
+docs {
+  One keyless request for up to five MLB events, fixed US moneyline. The demo accepts no market or live filters. An empty events array is valid. Inspect the returned source prices and timestamps; no freshness, completeness or profit is implied.
+}

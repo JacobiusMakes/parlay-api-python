@@ -1,0 +1,30 @@
+meta {
+  name: 02 My usage and allowance
+  type: http
+  seq: 5
+}
+
+get {
+  url: https://parlay-api.com/v1/account
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  if (req.getExecutionMode() !== "standalone") {
+    bru.runner.skipRequest();
+    throw new Error("Private requests are disabled in collection runs. Open one request and use Send.");
+  }
+  if (bru.getProcessEnv("PARLAYAPI_ENABLE_PRIVATE_REQUESTS") !== "true") {
+    throw new Error("Private requests are off. Read the local .env instructions before enabling them.");
+  }
+  const key = bru.getProcessEnv("PARLAY_API_KEY");
+  if (typeof key !== "string" || !key.trim() || /[\r\n]/.test(key)) {
+    throw new Error("Set your own PARLAY_API_KEY in the ignored local .env file.");
+  }
+  req.setHeader("X-API-Key", key.trim());
+}
+
+docs {
+  Read only the account associated with your local key. Open this request and use Send after explicit opt-in. The response is private. Do not export it into this shared collection or a public report. This request does not change your subscription.
+}
