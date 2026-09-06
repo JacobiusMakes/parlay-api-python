@@ -1,5 +1,9 @@
 # ParlayAPI private research in Bruno
 
+[![Fetch in Bruno](https://fetch.usebruno.com/button.svg)](https://fetch.usebruno.com?url=https://github.com/JacobiusMakes/parlay-api-python.git)
+
+Use the button to fetch this repository, then select the collection under `examples/bruno`.
+
 Open this folder as a collection in [Bruno](https://www.usebruno.com/). Start with **01 Public discovery / 03 MLB moneyline demo**, then click **Send**. No key or account is required for that request. It returns up to five MLB events with US moneyline data; an empty response is possible.
 
 This is a small native Bruno collection with a visible sport selector, local environment handling, guards for private requests and response assertions. The broader [Postman collection](https://parlay-api.com/postman) remains available for other endpoints and clients.
