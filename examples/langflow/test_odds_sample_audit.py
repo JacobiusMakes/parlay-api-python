@@ -3,6 +3,7 @@ import copy
 import json
 import pathlib
 import unittest
+import uuid
 
 import jq
 
@@ -20,6 +21,19 @@ def audit(fixture, status=200):
 class OddsSampleAuditTests(unittest.TestCase):
     def setUp(self):
         self.fixture = copy.deepcopy(FIXTURE)
+
+    def test_stable_identity_and_required_flow_metadata(self):
+        self.assertEqual(FLOW['id'], 'b4d95386-7c85-5601-8e02-ecefee6c756e')
+        identifier = uuid.UUID(FLOW['id'])
+        self.assertEqual(str(identifier), FLOW['id'])
+        self.assertEqual(identifier.version, 5)
+        self.assertEqual(FLOW['name'], 'Odds Sample Audit')
+        for field in ['name', 'description']:
+            self.assertIsInstance(FLOW[field], str)
+            self.assertTrue(FLOW[field].strip())
+        self.assertIsInstance(FLOW['tags'], list)
+        self.assertTrue(FLOW['tags'])
+        self.assertTrue(all(isinstance(tag, str) and tag.strip() for tag in FLOW['tags']))
 
     def test_known_complete_incomplete_and_ambiguous_groups(self):
         result = audit(self.fixture)

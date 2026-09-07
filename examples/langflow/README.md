@@ -14,7 +14,7 @@ Chat message storage and response file saving are disabled. Langflow may retain 
 
 The fixture contains fictional teams, bookmakers, prices, and dates. It is MIT-licensed teaching data, not a sample of current ParlayAPI coverage. For a separate own-key workflow, see the [ParlayAPI Python SDK](https://github.com/JacobiusMakes/parlay-api-python). Software licensing does not include API data redistribution rights or amend customer agreements.
 
-Validated in published Langflow 1.12.0: native import, editor rendering and execution pass, including the expected counters and exact source values. Fifteen query/graph tests and seven harness tests also pass. See the [hosted validation run](https://github.com/JacobiusMakes/parlay-api-python/actions/runs/34070155028). Langflow 1.13 runtime execution has not been tested.
+Validated in published Langflow 1.12.0: native import, editor rendering and execution pass, including the expected counters and exact source values. Sixteen metadata/query/graph tests and seven harness tests also pass. See the [hosted validation run](https://github.com/JacobiusMakes/parlay-api-python/actions/runs/34070155028). Langflow 1.13 runtime execution has not been tested.
 
 ![Actual Langflow editor displaying the fictional-data workflow](native-editor.png)
 
