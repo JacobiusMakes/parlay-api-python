@@ -80,9 +80,9 @@ def walk(value):
             yield from walk(item)
 
 
-def final_audit(response):
-    """Require the final native Chat Output, not an intermediate JQ artifact."""
-    found = []
+def final_message_texts(response):
+    """Select text from the final Chat Output component only."""
+    texts = []
     for item in walk(response):
         if not isinstance(item, dict) or item.get("component_id") != "ChatOutput-report":
             continue
@@ -90,12 +90,26 @@ def final_audit(response):
         for field in walk(message):
             if not isinstance(field, dict) or not isinstance(field.get("text"), str):
                 continue
-            try:
-                parsed = json.loads(field["text"])
-            except ValueError:
-                continue
-            if isinstance(parsed, dict) and set(EXPECTED).issubset(parsed):
-                found.append(parsed)
+            texts.append(field["text"])
+    return texts
+
+
+def final_audit(response):
+    """Require final Chat Output JSON, optionally in Langflow's full JSON fence."""
+    found = []
+    for text in final_message_texts(response):
+        text = text.strip()
+        # Langflow 1.12 Parser Stringify uses safe_convert(Data), which emits
+        # exactly a JSON Markdown fence. Do not search arbitrary surrounding prose.
+        fenced = re.fullmatch(r"```json[ \t]*\r?\n(.*?)\r?\n```", text, flags=re.DOTALL)
+        if fenced:
+            text = fenced.group(1)
+        try:
+            parsed = json.loads(text)
+        except ValueError:
+            continue
+        if isinstance(parsed, dict) and set(EXPECTED).issubset(parsed):
+            found.append(parsed)
     assert found, "Native final Chat Output did not contain the audit JSON"
     assert all(item == found[0] for item in found), "Conflicting final outputs"
     return found[0]
@@ -189,15 +203,26 @@ def validate(example_dir, artifacts):
             for node_id in sorted(NODE_IDS):
                 expect(page.locator(f'.react-flow__node[data-id="{node_id}"]')).to_be_visible(timeout=90_000)
             expect(page.locator(".react-flow__edge")).to_have_count(3)
+            instruction = page.locator('.react-flow__node[data-id="note-setup"]').get_by_text(
+                "Run the final Chat Output component", exact=False
+            )
+            expect(instruction).to_be_visible()
+            expect(instruction).to_be_in_viewport()
             page.screenshot(path=str(artifacts / "native-editor.png"), full_page=True)
-            report["checks"].append("Actual Langflow editor displays the four imported component nodes and edges")
+            report["checks"].append("Actual Langflow editor displays four component nodes, three edges, and the Run instruction")
 
             report["stage"] = "native execution"
             result = context.request.post(BASE + f"/api/v1/run/session/{flow_id}?stream=false", data={
                 "input_value": "", "input_type": "chat", "output_type": "chat", "tweaks": {}
             }, timeout=90_000)
             assert result.ok, f"Native execution returned HTTP {result.status}"
-            audit = final_audit(result.json())
+            response_data = result.json()
+            # The validated flow has only a public synthetic fixture and no keys.
+            # Retain only final message text, never session/cookie/response metadata.
+            diagnostics = [re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "", text)[:50_000]
+                           for text in final_message_texts(response_data)]
+            (artifacts / "native-final-messages.json").write_text(json.dumps(diagnostics, indent=2) + "\n")
+            audit = final_audit(response_data)
             check_audit(audit, fixture)
             (artifacts / "native-output.json").write_text(json.dumps(audit, indent=2) + "\n")
             report["checks"].append("Final native Chat Output has expected 1/1/2/1 counters and exact synthetic source values")

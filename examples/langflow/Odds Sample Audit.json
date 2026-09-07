@@ -14,7 +14,7 @@
         "type": "genericNode",
         "position": {
           "x": 0,
-          "y": 440
+          "y": 680
         },
         "data": {
           "id": "APIRequest-fixture",
@@ -436,7 +436,7 @@
         "type": "genericNode",
         "position": {
           "x": 380,
-          "y": 440
+          "y": 680
         },
         "data": {
           "id": "DataOperations-audit",
@@ -834,7 +834,7 @@
         "type": "genericNode",
         "position": {
           "x": 760,
-          "y": 440
+          "y": 680
         },
         "data": {
           "id": "ParserComponent-report",
@@ -1030,7 +1030,7 @@
         "type": "genericNode",
         "position": {
           "x": 1140,
-          "y": 440
+          "y": 680
         },
         "data": {
           "id": "ChatOutput-report",
@@ -1333,10 +1333,14 @@
         "type": "noteNode",
         "position": {
           "x": 0,
-          "y": -300
+          "y": 0
         },
-        "width": 1400,
-        "height": 680,
+        "width": 1460,
+        "height": 640,
+        "measured": {
+          "width": 1460,
+          "height": 640
+        },
         "data": {
           "id": "note-setup",
           "type": "note",

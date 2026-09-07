@@ -85,6 +85,19 @@ class NativeHarnessTests(unittest.TestCase):
                 with self.assertRaises(AssertionError):
                     check_audit(audit, self.fixture)
 
+    def test_accepts_native_parser_full_json_fence(self):
+        text = "```json\n" + json.dumps(self.audit(), indent=2) + "\n```"
+        entry = {"component_id": "ChatOutput-report", "results": {"message": {"text": text}}}
+        self.assertEqual(final_audit({"outputs": [entry]}), self.audit())
+
+    def test_rejects_fenced_json_with_surrounding_prose(self):
+        text = "```json\n" + json.dumps(self.audit()) + "\n```"
+        for decorated in ["Unverified summary\n" + text, text + "\nExtra output"]:
+            with self.subTest(text=decorated):
+                entry = {"component_id": "ChatOutput-report", "results": {"message": {"text": decorated}}}
+                with self.assertRaises(AssertionError):
+                    final_audit({"outputs": [entry]})
+
 
 if __name__ == "__main__":
     unittest.main()
