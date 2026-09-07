@@ -2,7 +2,7 @@
 
 A four-component workflow that inspects a fictional odds response before it is used elsewhere. It makes one GET to a pinned GitHub fixture, checks market completeness and source timestamp presence, and prints a structured report. No API key, LLM, or credits are required.
 
-Download the [flow JSON](https://raw.githubusercontent.com/JacobiusMakes/parlay-api-python/5a12ac2f6dd7201fe3d25bad637f0c4a49c11832/examples/langflow/Odds%20Sample%20Audit.json) and import it into Langflow. The built-in JSON Operations component uses JQ Expression, which requires `jq` in your Langflow Python environment. Run the final Chat Output component. The fixture intentionally produces:
+Download the [flow JSON](https://raw.githubusercontent.com/JacobiusMakes/parlay-api-python/25e00d0448136db72f9d8a6601e8b54dcde8f54a/examples/langflow/Odds%20Sample%20Audit.json) and import it into Langflow. The built-in JSON Operations component uses JQ Expression, which requires `jq` in your Langflow Python environment. Run the final Chat Output component. The fixture intentionally produces:
 
 - 1 complete market with both team outcomes.
 - 2 incomplete or ambiguous markets, including duplicate market groups.
