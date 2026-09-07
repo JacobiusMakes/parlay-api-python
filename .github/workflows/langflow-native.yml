@@ -14,8 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      NATIVE_ARTIFACTS: ${{ runner.temp }}/langflow-native-artifacts
-      LANGFLOW_CONFIG_DIR: ${{ runner.temp }}/langflow-native-state
       LANGFLOW_AUTO_LOGIN: "true"
       LANGFLOW_HOST: "127.0.0.1"
       LANGFLOW_PORT: "7860"
@@ -25,6 +23,10 @@ jobs:
       DO_NOT_TRACK: "true"
       LANGFLOW_CREATE_STARTER_PROJECTS: "false"
     steps:
+      - name: Set isolated runtime paths
+        run: |
+          echo "NATIVE_ARTIFACTS=$RUNNER_TEMP/langflow-native-artifacts" >> "$GITHUB_ENV"
+          echo "LANGFLOW_CONFIG_DIR=$RUNNER_TEMP/langflow-native-state" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
