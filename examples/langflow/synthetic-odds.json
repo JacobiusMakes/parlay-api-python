@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "description": "Fictional teaching fixture. Not current odds or an event schedule.",
+  "events": [
+    {
+      "id": "fictional-event-001",
+      "sport_key": "baseball_mlb",
+      "home_team": "Example Home",
+      "away_team": "Example Away",
+      "bookmakers": [
+        {
+          "key": "example_complete",
+          "title": "Example Complete",
+          "last_update": "2030-01-01T12:00:00Z",
+          "markets": [{"key": "h2h", "outcomes": [{"name": "Example Home", "price": -120}, {"name": "Example Away", "price": 110}]}]
+        },
+        {
+          "key": "example_incomplete",
+          "title": "Example Incomplete",
+          "markets": [{"key": "h2h", "outcomes": [{"name": "Example Home", "price": -115}]}]
+        },
+        {
+          "key": "example_ambiguous",
+          "title": "Example Ambiguous",
+          "last_update": "2030-01-01T12:00:00Z",
+          "markets": [
+            {"key": "h2h", "outcomes": [{"name": "Example Home", "price": -120}, {"name": "Example Away", "price": 110}]},
+            {"key": "h2h", "outcomes": [{"name": "Example Home", "price": -120}, {"name": "Example Away", "price": 110}]}
+          ]
+        }
+      ]
+    }
+  ]
+}
