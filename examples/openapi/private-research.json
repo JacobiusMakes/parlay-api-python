@@ -65,7 +65,8 @@
         },
         "tags": [
           "Discovery"
-        ]
+        ],
+        "security": []
       }
     },
     "/v1/sports/{sport_key}/odds": {
