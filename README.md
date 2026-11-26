@@ -31,6 +31,17 @@ and invalid outcomes are excluded with diagnostics on stderr. Missing timestamps
 stay empty; timestamps are not freshness guarantees. The starter makes no
 rankings or profit claims, and has no automatic retries, polling or key storage.
 
+## Plan a request schedule before polling
+
+Use the free [API workload planner](https://parlay-api.com/tools/api-workload?utm_source=github&utm_medium=sdk_readme&utm_campaign=parlay-api-python)
+to write down your active window, refresh interval, separately polled sports,
+requests per refresh and active days. Include every required endpoint and page.
+The planner needs no account or key and does not make API requests.
+
+Leave credit cost unknown until you verify the unit cost for your exact request
+shape in the current documentation. The estimate uses your assumptions; it does
+not establish live coverage, entitlement or the freshness of returned records.
+
 ## Continue with your own account
 
 [Create your own account](https://parlay-api.com/signup?utm_source=python_sdk&utm_medium=package&utm_campaign=activation_033),
