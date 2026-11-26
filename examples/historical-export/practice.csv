@@ -1,0 +1,4 @@
+game_date,sport_key,commence_time,home_team,away_team,source,player_name,market_key,market_label,line,over_price,under_price,over_implied_prob,under_implied_prob,snapshot_time,retired,closed_on
+2024-08-16,practice_league,2024-08-16T18:00:00Z,Harbor,Valley,practice_book,Alex Example,hits,Hits,1.5,-110,-105,,,2024-08-16T17:59:00Z,,
+2024-08-16,practice_league,2024-08-16T18:00:00Z,Harbor,Valley,practice_book,Sam Example,runs,Runs,0.5,-115,,,,2024-08-16T17:58:00Z,,
+2024-08-17,practice_league,2024-08-17T18:00:00Z,Valley,Harbor,practice_book,Alex Example,hits,Hits,1.5,105,-125,,,2024-08-17T17:57:00Z,,

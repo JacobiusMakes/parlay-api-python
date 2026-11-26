@@ -125,6 +125,8 @@ WebSocket access is Business tier and up; see the current docs before connecting
 
 ## Existing examples
 
+[Load a historical closing-lines CSV into SQLite](https://github.com/JacobiusMakes/parlay-api-python/tree/main/examples/historical-export). Start with three fictional rows, run the missing-price query, then import a saved export into a new private database. No API request is needed for the workshop.
+
 The installed command and the standalone
 [odds_workspace.py download](https://raw.githubusercontent.com/JacobiusMakes/parlay-api-python/main/examples/odds_workspace.py)
 use the same source file. With no package installation, download that file and
