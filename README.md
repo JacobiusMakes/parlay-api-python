@@ -111,6 +111,12 @@ except ParlayAPIError as error:
     print(type(error).__name__)
 ```
 
+Practice choosing a next check with the
+[offline first-response rehearsal](https://github.com/JacobiusMakes/parlayapi-notebooks/tree/main/labs/response-triage).
+Its twelve invented cases distinguish authentication, access, rate-limit and
+transport outcomes, with explicit attempt and wait budgets. The Python command
+runs without keys or API requests.
+
 After a successful SDK request, `client.last_quota` contains the returned usage
 headers. Header fields may be `None` when the service does not provide them.
 
